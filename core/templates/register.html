@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Регистрация — LuxStay{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card auth-card--wide">
+
+    <div class="auth-logo">
+      <a href="{% url 'index' %}" style="font-family:'Playfair Display',serif;font-size:2rem;text-decoration:none;letter-spacing:.08em;">
+        <span style="color:#c8a96e">LUX</span><span style="color:var(--white);font-weight:400">STAY</span>
+      </a>
+    </div>
+
+    <h1 class="auth-heading" style="color:#c8a96e">Создать аккаунт</h1>
+    <p class="auth-sub">Присоединяйтесь — это бесплатно</p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label class="field__label">{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<p class="field__error">{{ form.first_name.errors.0 }}</p>
+          {% endif %}
+        </div>
+        <div class="field">
+          <label class="field__label">{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<p class="field__error">{{ form.last_name.errors.0 }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}<p class="field__error">{{ form.username.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        <label class="field__label">{{ form.email.label }}</label>
+        {{ form.email }}
+        {% if form.email.errors %}<p class="field__error">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label class="field__label">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}<p class="field__error">{{ form.password1.errors.0 }}</p>
+          {% endif %}
+        </div>
+        <div class="field">
+          <label class="field__label">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}<p class="field__error">{{ form.password2.errors.0 }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full mt-2">Зарегистрироваться</button>
+    </form>
+
+    <div class="auth-footer">
+      Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+

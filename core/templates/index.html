@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}LuxStay — Роскошные отели мира{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__grid"></div>
+  <div class="hero__glow"></div>
+
+  <div class="hero__content">
+    <div class="eyebrow hero__tag">Premium Collection · 2024</div>
+
+    <h1 class="hero__title">
+      Роскошь<br><em>без границ</em>
+    </h1>
+
+    <p class="hero__sub">
+      Откройте для себя лучшие отели мира — от бутик-отелей до легендарных дворцов.
+    </p>
+
+    <!-- ── ПОИСК ── -->
+    <div class="search-box">
+      <!-- Табы -->
+      <div class="search-box__tabs">
+        <button class="search-box__tab search-box__tab--active" onclick="setTab(this, 'hotels')">🏨 Отели и квартиры</button>
+        <button class="search-box__tab" onclick="setTab(this, 'flights')">✈️ Авиабилеты</button>
+        <button class="search-box__tab" onclick="setTab(this, 'business')">💼 Для командировок</button>
+      </div>
+
+      <!-- Форма отелей -->
+      <form action="{% url 'search' %}" method="get" class="search-box__form" id="form-hotels">
+        <div class="search-box__fields">
+          <div class="search-box__field search-box__field--wide">
+            <label class="search-box__label">Направление</label>
+            <input type="text" name="q" class="search-box__input" placeholder="Город, отель или район">
+          </div>
+          <div class="search-box__field">
+            <label class="search-box__label">Заезд</label>
+            <input type="date" name="checkin" class="search-box__input" id="checkin">
+          </div>
+          <div class="search-box__field">
+            <label class="search-box__label">Выезд</label>
+            <input type="date" name="checkout" class="search-box__input" id="checkout">
+          </div>
+          <div class="search-box__field search-box__field--guests" id="guests-field" onclick="toggleGuests(event)">
+            <label class="search-box__label">Гости</label>
+            <div class="search-box__input search-box__guests-display" id="guests-display">0 гостя · 0 номер</div>
+            <div class="guests-dropdown" id="guests-dropdown">
+              <div class="guests-row">
+                <span class="guests-row__label">Номера</span>
+                <div class="guests-counter">
+                  <button type="button" onclick="changeCount(event,'rooms',-1)">−</button>
+                  <span id="rooms-count">1</span>
+                  <button type="button" onclick="changeCount(event,'rooms',1)">+</button>
+                </div>
+              </div>
+              <div class="guests-row">
+                <span class="guests-row__label">Взрослые</span>
+                <div class="guests-counter">
+                  <button type="button" onclick="changeCount(event,'adults',-1)">−</button>
+                  <span id="adults-count">2</span>
+                  <button type="button" onclick="changeCount(event,'adults',1)">+</button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" style="width:100%; margin-top:.75rem;" onclick="applyGuests(event)">Применить</button>
+            </div>
+          </div>
+          <!-- 1. Скрытое поле для гостей -->
+          <input type="hidden" name="guests" id="guests-hidden" value="2">
+          <button type="submit" class="btn btn-primary search-box__btn">Найти</button>
+        </div>
+        <div class="search-box__extras">
+          <label class="search-box__check"><input type="checkbox" name="apartments_only"> Только квартиры</label>
+          <label class="search-box__check"><input type="radio" name="trip_type" value="leisure" checked> Отдых</label>
+          <label class="search-box__check"><input type="radio" name="trip_type" value="work"> Работа</label>
+        </div>
+      </form>
+
+      <!-- Форма авиабилетов -->
+      <form action="{% url 'flight_search' %}" method="get" class="search-box__form" id="form-flights" style="display:none;">
+        <div class="flights-options">
+          <div class="flights-select-wrap">
+            <select class="flights-select" id="flight-type" onchange="updateFlightForm()">
+              <option value="roundtrip">↔ Туда и обратно</option>
+              <option value="oneway">→ В одну сторону</option>
+              <option value="multi">⇄ Сложный маршрут</option>
+            </select>
+          </div>
+          <label class="search-box__check">
+            <input type="checkbox" id="no-stops"> Без пересадок
+          </label>
+          <div class="flights-select-wrap">
+            <select class="flights-select" id="flight-class">
+              <option>Эконом</option>
+              <option>Комфорт</option>
+              <option>Бизнес</option>
+              <option>Первый класс</option>
+            </select>
+          </div>
+          <div class="search-box__field search-box__field--guests" id="pax-field" onclick="togglePax()" style="min-width:160px;">
+            <div class="search-box__input search-box__guests-display" id="pax-display">1 взрослый</div>
+            <div class="guests-dropdown" id="pax-dropdown">
+              <div class="guests-row">
+                <span class="guests-row__label">Взрослые</span>
+                <div class="guests-counter">
+                  <button type="button" onclick="changePax(event,'pax_adults',-1)">−</button>
+                  <span id="pax_adults-count">1</span>
+                  <button type="button" onclick="changePax(event,'pax_adults',1)">+</button>
+                </div>
+              </div>
+              <div class="guests-row">
+                <span class="guests-row__label">Дети (2–11)</span>
+                <div class="guests-counter">
+                  <button type="button" onclick="changePax(event,'pax_children',-1)">−</button>
+                  <span id="pax_children-count">0</span>
+                  <button type="button" onclick="changePax(event,'pax_children',1)">+</button>
+                </div>
+              </div>
+              <div class="guests-row">
+                <span class="guests-row__label">Младенцы (до 2)</span>
+                <div class="guests-counter">
+                  <button type="button" onclick="changePax(event,'pax_infants',-1)">−</button>
+                  <span id="pax_infants-count">0</span>
+                  <button type="button" onclick="changePax(event,'pax_infants',1)">+</button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" style="width:100%;margin-top:.75rem;" onclick="applyPax(event)">Применить</button>
+            </div>
+          </div>
+        </div>
+        <div class="search-box__fields" id="flight-fields">
+          <div class="search-box__field search-box__field--wide">
+            <label class="search-box__label">Откуда</label>
+            <input type="text" name="origin" class="search-box__input" placeholder="Город или аэропорт">
+          </div>
+          <div class="search-box__field search-box__field--wide">
+            <label class="search-box__label">Куда</label>
+            <input type="text" name="destination" class="search-box__input" placeholder="Город или аэропорт">
+          </div>
+          <div class="search-box__field" id="flight-date-there">
+            <label class="search-box__label">Туда</label>
+            <input type="date" name="date_there" class="search-box__input" id="flight-checkin">
+          </div>
+          <div class="search-box__field" id="flight-date-back">
+            <label class="search-box__label">Обратно</label>
+            <input type="date" name="date_back" class="search-box__input" id="flight-checkout">
+          </div>
+          <button type="submit" class="btn btn-primary search-box__btn">Найти</button>
+        </div>
+      </form>
+
+      <!-- Форма командировок -->
+      <form action="{% url 'search' %}" method="get" class="search-box__form" id="form-business" style="display:none;">
+        <div class="search-box__fields">
+          <div class="search-box__field search-box__field--wide">
+            <label class="search-box__label">Направление</label>
+            <input type="text" name="q" class="search-box__input" placeholder="Город или отель">
+          </div>
+          <div class="search-box__field">
+            <label class="search-box__label">Заезд</label>
+            <input type="date" class="search-box__input" id="biz-checkin">
+          </div>
+          <div class="search-box__field">
+            <label class="search-box__label">Выезд</label>
+            <input type="date" class="search-box__input" id="biz-checkout">
+          </div>
+          <div class="search-box__field">
+            <label class="search-box__label">Сотрудники</label>
+            <input type="number" name="employees" min="1" value="1" class="search-box__input">
+          </div>
+          <button type="submit" class="btn btn-primary search-box__btn">Найти</button>
+        </div>
+        <div class="search-box__extras">
+          <label class="search-box__check"><input type="checkbox" name="invoice"> Нужен счёт/акт</label>
+          <label class="search-box__check"><input type="checkbox" name="wifi"> Бесплатный Wi-Fi</label>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="hero__actions">
+      <a href="#directions" class="btn btn-ghost">Направления</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── ВСЕ ОТЕЛИ ── -->
+<section class="section" id="all-hotels" style="padding-top:4rem;padding-bottom:4rem;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header__left">
+        <div class="eyebrow">Наша коллекция</div>
+        <h2 class="section-title">Все отели</h2>
+        <p>Лучшие отели из нашей коллекции</p>
+      </div>
+        <a href="{% url 'all_hotels' %}" class="btn btn-outline">
+          Смотреть все →
+        </a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem;">
+      {% for hotel in hotels %}
+      <a href="{% url 'hotel_detail' hotel.id %}"
+         style="text-decoration:none;"
+         onmouseover="this.querySelector('.hcard').style.borderColor='rgba(200,169,110,.35)';this.querySelector('.hcard').style.transform='translateY(-4px)'"
+         onmouseout="this.querySelector('.hcard').style.borderColor='rgba(200,169,110,.12)';this.querySelector('.hcard').style.transform='translateY(0)'">
+        <div class="hcard" style="background:#141414;border:1px solid rgba(200,169,110,.12);border-radius:1.2rem;overflow:hidden;transition:border-color .3s,transform .3s;">
+
+          <div style="position:relative;overflow:hidden;">
+            {% if hotel.image %}
+            <img src="{{ hotel.image.url }}" alt="{{ hotel.name }}"
+                 style="width:100%;height:220px;object-fit:cover;transition:transform .6s ease;">
+            {% else %}
+            <div style="width:100%;height:220px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:3.5rem;">🏨</div>
+            {% endif %}
+            <div style="position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.65);color:#c8a96e;font-size:.72rem;font-weight:600;padding:.35rem .75rem;border-radius:.4rem;border:1px solid rgba(200,169,110,.3);backdrop-filter:blur(4px);">
+              ★ {{ hotel.rating }}
+            </div>
+            <div style="position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.65);color:#c8a96e;font-size:.65rem;padding:.3rem .7rem;border-radius:.4rem;border:1px solid rgba(200,169,110,.2);backdrop-filter:blur(4px);">
+              {% for i in "12345" %}{% if forloop.counter <= hotel.stars %}★{% endif %}{% endfor %}
+            </div>
+          </div>
+
+          <div style="padding:1.4rem;">
+            <h3 style="font-size:1.1rem;color:#f2ede4;font-weight:400;letter-spacing:.04em;margin-bottom:.35rem;">{{ hotel.name }}</h3>
+            <p style="color:rgba(242,237,228,.35);font-size:.75rem;letter-spacing:.06em;margin-bottom:.9rem;">
+              {{ hotel.city.name }}, {{ hotel.city.country }}
+            </p>
+            {% if hotel.amenities %}
+            <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;">
+              {% for a in hotel.amenities_list %}
+              <span style="background:rgba(200,169,110,.07);color:#c8a96e;font-size:.68rem;padding:.22rem .6rem;border-radius:.3rem;border:1px solid rgba(200,169,110,.15);">{{ a }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid rgba(200,169,110,.08);">
+              <div>
+                <div style="color:rgba(242,237,228,.3);font-size:.6rem;letter-spacing:.2em;margin-bottom:.15rem;">ЗА НОЧЬ</div>
+                <span style="font-size:1.4rem;font-weight:600;color:#c8a96e;">${{ hotel.price }}</span>
+              </div>
+              <span style="padding:.65rem 1.2rem;background:#c8a96e;color:#0f0f0f;border-radius:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.15em;">
+                ПОДРОБНЕЕ
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </a>
+      {% empty %}
+      <div style="grid-column:1/-1;text-align:center;padding:4rem 0;color:rgba(242,237,228,.3);">
+        <div style="font-size:3rem;margin-bottom:1rem;">🏨</div>
+        <p>Отели пока не добавлены</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── ПРЕИМУЩЕСТВА ── -->
+<section class="section" style="background: var(--ink-2); border-top: 1px solid rgba(200,169,110,.08);">
+  <div class="container">
+    <div class="section-header text-center" style="flex-direction: column; align-items: center;">
+      <div class="eyebrow">Почему мы</div>
+      <h2 class="section-title">Наши преимущества</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-card__icon">🛡</span>
+        <h3 class="why-card__title">Безопасная оплата</h3>
+        <p class="why-card__text">Все транзакции защищены SSL-шифрованием и международными стандартами безопасности.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card__icon">💎</span>
+        <h3 class="why-card__title">Только лучшие отели</h3>
+        <p class="why-card__text">Каждый объект проходит строгую проверку качества и соответствия стандартам роскоши.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card__icon">⚡</span>
+        <h3 class="why-card__title">Быстрое подтверждение</h3>
+        <p class="why-card__text">Мгновенное подтверждение бронирования на почту — без ожидания и лишних звонков.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-card__icon">🌍</span>
+        <h3 class="why-card__title">Лучшие цены</h3>
+        <p class="why-card__text">Гарантируем лучшую цену. Найдёте дешевле — вернём разницу.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── НАПРАВЛЕНИЯ ── -->
+<section class="section" id="directions">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header__left">
+        <div class="eyebrow">Куда полететь</div>
+        <h2 class="section-title">Популярные направления</h2>
+        <p>Самые востребованные города среди наших гостей</p>
+      </div>
+      <a href="#directions" class="btn btn-outline btn-sm">Направления</a>
+    </div>
+    <div class="cities-grid">
+      {% for city in cities %}
+      <a href="{% url 'city_hotels' city.id %}" class="city-card">
+        <div class="city-card__bg">
+  {% if city.image %}
+    <img src="{{ city.image.url }}" alt="{{ city.name }}"
+         style="width:100%; height:100%; object-fit:cover; opacity:.7;">
+  {% endif %}
+</div>
+        <div class="city-card__gradient"></div>
+        <div class="city-card__body">
+          <div class="city-card__name">{{ city.name }}</div>
+          <div class="city-card__count">{{ city.hotel_set.count }} отелей</div>
+        </div>
+      </a>
+      {% empty %}
+      <div class="empty">
+        <span class="empty__icon">🏙</span>
+        <p class="empty__title">Города пока не добавлены</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+// Дефолтные даты
+const today = new Date();
+const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+const fmt = d => d.toISOString().split('T')[0];
+document.getElementById('checkin').value = fmt(today);
+document.getElementById('checkout').value = fmt(tomorrow);
+document.getElementById('flight-checkin').value = fmt(today);
+document.getElementById('flight-checkout').value = fmt(tomorrow);
+document.getElementById('biz-checkin').value = fmt(today);
+document.getElementById('biz-checkout').value = fmt(tomorrow);
+
+// Табы
+const forms = { hotels: 'form-hotels', flights: 'form-flights', business: 'form-business' };
+function setTab(btn, tab) {
+  document.querySelectorAll('.search-box__tab').forEach(t => t.classList.remove('search-box__tab--active'));
+  btn.classList.add('search-box__tab--active');
+  Object.values(forms).forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById(forms[tab]).style.display = 'block';
+}
+
+// Гости (отели)
+let counts = { rooms: 1, adults: 2, children: 0 };
+function toggleGuests(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('guests-dropdown').classList.toggle('guests-dropdown--open');
+}
+function changeCount(e, key, delta) {
+  e.stopPropagation();
+  const min = key === 'children' ? 0 : 1;
+  counts[key] = Math.max(min, counts[key] + delta);
+  document.getElementById(key + '-count').textContent = counts[key];
+}
+function applyGuests(e) {
+  e.stopPropagation();
+  const g = counts.adults + counts.children;
+  document.getElementById('guests-display').textContent =
+    `${g} ${g===1?'гость':g<5?'гостя':'гостей'} · ${counts.rooms} ${counts.rooms===1?'номер':counts.rooms<5?'номера':'номеров'}`;
+  // 2. Обновляем скрытое поле
+  document.getElementById('guests-hidden').value = g;
+  document.getElementById('guests-dropdown').classList.remove('guests-dropdown--open');
+}
+document.addEventListener('click', e => {
+  if (!document.getElementById('guests-field')?.contains(e.target))
+    document.getElementById('guests-dropdown').classList.remove('guests-dropdown--open');
+  if (!document.getElementById('pax-field')?.contains(e.target))
+    document.getElementById('pax-dropdown').classList.remove('guests-dropdown--open');
+});
+
+// Пассажиры (авиа)
+let pax = { pax_adults: 1, pax_children: 0, pax_infants: 0 };
+function togglePax() { document.getElementById('pax-dropdown').classList.toggle('guests-dropdown--open'); }
+function changePax(e, key, delta) {
+  e.stopPropagation();
+  pax[key] = Math.max(key === 'pax_adults' ? 1 : 0, pax[key] + delta);
+  document.getElementById(key + '-count').textContent = pax[key];
+}
+function applyPax(e) {
+  e.stopPropagation();
+  const a = pax.pax_adults;
+  document.getElementById('pax-display').textContent =
+    `${a} ${a===1?'взрослый':a<5?'взрослых':'взрослых'}${pax.pax_children ? ' · '+pax.pax_children+' реб.' : ''}${pax.pax_infants ? ' · '+pax.pax_infants+' мл.' : ''}`;
+  document.getElementById('pax-dropdown').classList.remove('guests-dropdown--open');
+}
+
+// Тип рейса
+function updateFlightForm() {
+  const type = document.getElementById('flight-type').value;
+  const backField = document.getElementById('flight-date-back');
+  backField.style.display = type === 'oneway' ? 'none' : '';
+}
+</script>
+
+{% endblock %}
+

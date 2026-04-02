@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Авиабилеты — LuxStay{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/flights.css' %}">
+
+<section class="flights-hero">
+  <h1>✈️ Авиабилеты</h1>
+  <p>{{ origin }} → {{ destination }}</p>
+</section>
+
+
+    <div class="date-prices">
+  {% for item in nearby_dates %}
+    <a href="?origin={{ origin }}&destination={{ destination }}&date_there={{ item.date|date:'Y-m-d' }}"
+       class="date-item {% if item.price %}{% if item.price == selected_price %}active{% endif %}{% endif %}">
+       
+      {{ item.date }}<br>
+      <span>
+        {% if item.price %}
+          {{ item.price }} сом
+        {% else %}
+          Найти
+        {% endif %}
+      </span>
+      
+    </a>
+  {% endfor %}
+</div>
+
+
+<section class="flights-container">
+
+  <!-- ЛЕВАЯ КОЛОНКА -->
+  <div class="left-panel">
+
+    <!-- Фильтры -->
+    <form method="get" class="filters-form">
+
+      <h3>Фильтры</h3>
+
+      <!-- скрытые -->
+      <input type="hidden" name="origin" value="{{ origin }}">
+      <input type="hidden" name="destination" value="{{ destination }}">
+      <input type="hidden" name="date_there" value="{{ request.GET.date_there }}">
+
+      <!-- багаж -->
+      <label>
+        <input type="checkbox" name="baggage" value="1">
+        С багажом
+      </label>
+
+      <!-- пересадки -->
+      <select name="transfers">
+        <option value="">Любые пересадки</option>
+        <option value="0">Прямые</option>
+        <option value="1">1 пересадка</option>
+        <option value="2">2 пересадки</option>
+      </select>
+
+      <!-- время -->
+      <select name="time">
+        <option value="">Любое время</option>
+        <option value="morning">Утро</option>
+        <option value="day">Днём</option>
+        <option value="evening">Вечер</option>
+      </select>
+
+      <button type="submit">Применить</button>
+
+    </form>
+
+  </div>
+
+  <!-- ПРАВАЯ КОЛОНКА (РЕЙСЫ) -->
+  <div class="flights-list" id="flights-list">
+
+      {% for f in flights %}
+  <div class="flight-card"
+       data-price="{{ f.price }}"
+       data-rating="{{ f.rating|default:0 }}">
+
+    <div class="flight-header">
+      <div class="airline">
+        {{ f.airline }} ⭐ {{ f.rating|default:"-" }}
+      </div>
+      <div class="price">
+        {{ f.price }} сом
+      </div>
+    </div>
+
+    <div class="baggage">
+      {{ f.baggage }} <br>
+      {{ f.hand_luggage }}
+    </div>
+
+    <div class="route">
+
+      <div class="segment">
+        <div class="time">{{ f.departure_time|default:"--:--" }}</div>
+        <div class="city">{{ origin }}</div>
+        <div class="date">{{ f.departure_date }}</div>
+      </div>
+
+      <div class="middle">
+        <div class="duration">{{ f.duration|default:"—" }}</div>
+
+        <div class="transfers">
+          {% if f.transfers == 0 %}
+            Прямой
+          {% else %}
+            {{ f.transfers }} пересадка
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="segment">
+        <div class="time">{{ f.arrival_time|default:"--:--" }}</div>
+        <div class="city">{{ destination }}</div>
+        <div class="date">{{ f.departure_date }}</div>
+      </div>
+
+    </div>
+
+    <div class="flight-bottom">
+      <button class="book-btn">Выбрать</button>
+    </div>
+
+  </div>
+  {% endfor %}
+
+{% endblock %}
+
+  {% block footer %}
+
+<!-- ❗ ОСТАВЛЯЕМ ТОЛЬКО ФУТЕР БЕЗ NEWSLETTER -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <div>
+        <p class="footer__heading">О нас</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'about' %}">О компании</a></li>
+          <li><a href="{% url 'contacts' %}">Контакты</a></li>
+          <li><a href="{% url 'terms' %}">Пользовательское соглашение</a></li>
+          <li><a href="{% url 'privacy' %}">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__heading">Помощь</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'faq' %}">F.A.Q.</a></li>
+          <li><a href="{% url 'report_bug' %}">Сообщить об ошибке</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__heading">Социальные сети</p>
+        <ul class="footer__links">
+          <li><a href="#">Instagram</a></li>
+          <li><a href="https://t.me/Gkdkne" target="_blank">Telegram</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__heading">Сервис</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'all_hotels' %}">Все отели</a></li>
+          <li><a href="#">Мои бронирования</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom" style="justify-content: center;">
+      <span>© 2024 LuxStay. Все права защищены.</span>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
+

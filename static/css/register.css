@@ -1,0 +1,136 @@
+/* ============================================================
+   REGISTER.CSS  —  Register page styles
+   ============================================================ */
+
+.auth-page {
+  min-height:  100vh;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+  padding:     2rem;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(200,169,110,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 70%, rgba(200,169,110,.04) 0%, transparent 60%),
+    var(--ink);
+}
+
+.auth-card {
+  width:         100%; max-width: 460px;
+  background:    var(--ink-2);
+  border:        1px solid rgba(200,169,110,.2);
+  border-radius: var(--r-xl);
+  padding:       3rem 2.5rem;
+  box-shadow:    var(--shadow), var(--shadow-sand);
+  position:      relative;
+  overflow:      hidden;
+}
+
+/* Subtle top accent line */
+.auth-card::before {
+  content:    '';
+  position:   absolute; top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sand), transparent);
+}
+
+.auth-logo {
+  text-align:    center;
+  margin-bottom: 2.2rem;
+}
+.auth-logo__text {
+  font-family:    var(--font-display);
+  font-size:      2rem;
+  color:          var(--sand);
+  letter-spacing: .08em;
+}
+.auth-logo__text span { color: var(--white); font-weight: 400; }
+
+.auth-heading {
+  font-size:     1.9rem;
+  text-align:    center;
+  margin-bottom: .4rem;
+}
+
+.auth-sub {
+  text-align:    center;
+  font-size:     .88rem;
+  color:         rgba(242,237,228,.38);
+  margin-bottom: 2.5rem;
+}
+
+/* Error list (Django form errors) */
+.auth-errors {
+  background:    rgba(192,57,43,.1);
+  border:        1px solid rgba(192,57,43,.3);
+  border-radius: var(--r);
+  padding:       .75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+.auth-errors li {
+  font-size:   .84rem;
+  color:       #e74c3c;
+  line-height: 1.6;
+}
+
+.auth-footer {
+  text-align:  center;
+  margin-top:  2rem;
+  font-size:   .88rem;
+  color:       rgba(242,237,228,.38);
+}
+.auth-footer a { color: var(--sand); }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* Divider with text */
+.auth-divider {
+  display:         flex;
+  align-items:     center;
+  gap:             1rem;
+  margin:          1.5rem 0;
+  color:           rgba(242,237,228,.22);
+  font-size:       .78rem;
+  letter-spacing:  .1em;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content:    '';
+  flex:       1;
+  height:     1px;
+  background: rgba(255,255,255,.07);
+}
+
+.field input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #1a1a1a;
+  outline: none;
+}
+
+.field input::placeholder {
+  color: rgba(0,0,0,0.35);
+}
+
+.field input:focus {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.field__label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  color: #c8a96e;
+}
+
+.form-grid-2 .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grid-2 .field input {
+  margin-top: auto;
+}
+

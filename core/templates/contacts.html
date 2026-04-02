@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Контакты — LuxStay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}">Главная</a>
+      <span class="breadcrumb__sep"></span>
+      <span>Контакты</span>
+    </div>
+    <h1 class="section-title">Контакты</h1>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div style="max-width: 780px; margin: 0 auto;">
+      <div class="eyebrow">Свяжитесь с нами</div>
+      <h2 class="section-title" style="margin-bottom: 1rem;">Контакты</h2>
+      <p style="color: rgba(242,237,228,.65); margin-bottom: 2.5rem; font-size: 1.05rem;">ОсОО «LUXSTAY»</p>
+
+      <div class="grid-3" style="margin-bottom: 3rem;">
+        <div class="card" style="padding: 2rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📞</div>
+          <p class="footer__heading">Телефон</p>
+          <p style="color: rgba(242,237,228,.65);">+ 996 223 806 091</p>
+        </div>
+        <div class="card" style="padding: 2rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+          <p class="footer__heading">Email</p>
+          <p style="color: rgba(242,237,228,.65);">luxstay2026@gmail.com</p>
+        </div>
+        <div class="card" style="padding: 2rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+          <p class="footer__heading">Адрес</p>
+          <p style="color: rgba(242,237,228,.65);">г. Манас, ул. Р. Бегалиева</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

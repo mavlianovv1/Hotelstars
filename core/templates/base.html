@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LuxStay{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/common.css' %}">
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% block navbar %}
+<nav class="navbar" id="navbar">
+  <a href="{% url 'index' %}" class="navbar__logo">LUX<span>STAY</span></a>
+  <ul class="navbar__links">
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'logout' %}">Выйти</a></li>
+    {% else %}
+      <li><a href="{% url 'login' %}">Войти</a></li>
+      <li><a href="{% url 'register' %}" class="navbar__cta">Регистрация</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block footer %}
+
+<!-- ── ПОДПИСКА ── -->
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter__inner">
+      <div class="newsletter__left">
+        <h2 class="newsletter__title">Будем на связи?</h2>
+        <p class="newsletter__sub">Расскажем о скидках и подскажем идеи для новых путешествий</p>
+        <form class="newsletter__form" onsubmit="return false;">
+          <div class="newsletter__field">
+            <input type="email" class="newsletter__input" placeholder="Электронная почта">
+            <button type="submit" class="btn btn-primary newsletter__btn">Подписаться</button>
+          </div>
+          <p class="newsletter__legal">
+            Нажимая «Подписаться», вы принимаете условия
+            <a href="{% url 'terms' %}">Пользовательского соглашения</a>
+            и даёте согласие на обработку персональных данных в соответствии с
+            <a href="{% url 'privacy' %}">Политикой конфиденциальности</a>.
+          </p>
+        </form>
+      </div>
+      <div class="newsletter__right">
+        <div class="newsletter__decor">
+          <div class="newsletter__circle newsletter__circle--1"></div>
+          <div class="newsletter__circle newsletter__circle--2"></div>
+          <div class="newsletter__icon">✈</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <!-- О нас -->
+      <div>
+        <p class="footer__heading">О нас</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'about' %}">О компании</a></li>
+          <li><a href="{% url 'contacts' %}">Контакты</a></li>
+          <li><a href="{% url 'terms' %}">Пользовательское соглашение</a></li>
+          <li><a href="{% url 'privacy' %}">Политика конфиденциальности</a></li>
+        </ul>
+      </div>
+
+      <!-- Помощь -->
+      <div>
+        <p class="footer__heading">Помощь</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'faq' %}">F.A.Q.</a></li>
+          <li><a href="{% url 'report_bug' %}">Сообщить об ошибке</a></li>
+        </ul>
+      </div>
+
+      <!-- Социальные сети -->
+      <div>
+        <p class="footer__heading">Социальные сети</p>
+        <ul class="footer__links">
+          <li><a href="#" target="_blank">Instagram</a></li>
+          <li><a href="https://t.me/Gkdkne" target="_blank">Telegram</a></li>
+        </ul>
+      </div>
+
+
+
+      <!-- Сервис -->
+      <div>
+        <p class="footer__heading">Сервис</p>
+        <ul class="footer__links">
+          <li><a href="{% url 'all_hotels' %}">Все отели</a></li>
+          <li><a href="{% url 'my_bookings' %}">Мои бронирования</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="footer__bottom" style="justify-content: center;">
+      <span>© 2024 LuxStay. Все права защищены.</span>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Политика конфиденциальности — LuxStay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}">Главная</a>
+      <span class="breadcrumb__sep"></span>
+      <span>Политика конфиденциальности</span>
+    </div>
+    <h1 class="section-title">Политика конфиденциальности</h1>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div style="max-width: 780px; margin: 0 auto; color: rgba(242,237,228,.65); line-height: 1.9;">
+
+      <p style="margin-bottom: 2rem; color: rgba(242,237,228,.4); font-size: .85rem;">Последнее обновление: январь 2024</p>
+
+      <h3 style="color: var(--white); font-family: var(--font-display); margin-bottom: 1rem; margin-top: 2rem;">1. Какие данные мы собираем</h3>
+      <p style="margin-bottom: 1.5rem;">Мы собираем данные, которые вы предоставляете при регистрации (имя, email), а также технические данные (IP-адрес, тип браузера) для улучшения работы сервиса.</p>
+
+      <h3 style="color: var(--white); font-family: var(--font-display); margin-bottom: 1rem; margin-top: 2rem;">2. Как мы используем данные</h3>
+      <p style="margin-bottom: 1.5rem;">Ваши данные используются исключительно для обеспечения работы платформы, обработки бронирований и связи с вами по вопросам поддержки.</p>
+
+      <h3 style="color: var(--white); font-family: var(--font-display); margin-bottom: 1rem; margin-top: 2rem;">3. Передача данных третьим лицам</h3>
+      <p style="margin-bottom: 1.5rem;">Мы не продаём и не передаём ваши личные данные третьим лицам без вашего согласия, за исключением случаев, предусмотренных законодательством.</p>
+
+      <h3 style="color: var(--white); font-family: var(--font-display); margin-bottom: 1rem; margin-top: 2rem;">4. Безопасность</h3>
+      <p style="margin-bottom: 1.5rem;">Мы применяем современные методы защиты данных. Однако ни одна система не может гарантировать абсолютную безопасность передачи данных через интернет.</p>
+
+      <h3 style="color: var(--white); font-family: var(--font-display); margin-bottom: 1rem; margin-top: 2rem;">5. Ваши права</h3>
+      <p>Вы вправе запросить удаление своих данных, обратившись к нам через страницу <a href="{% url 'contacts' %}" style="color: var(--sand);">Контакты</a>.</p>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

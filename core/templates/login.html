@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Войти — LuxStay{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="{% url 'index' %}" style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--sand);text-decoration:none;letter-spacing:.08em;">
+        LUX<span style="color:var(--white);font-weight:400">STAY</span>
+      </a>
+    </div>
+
+    <h1 class="auth-heading">Добро пожаловать</h1>
+    <p class="auth-sub">Войдите в свой аккаунт</p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <ul class="auth-errors">
+        {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      <div class="field">
+        <label class="field__label">Логин</label>
+        <input type="text" name="username" class="field__input"
+               placeholder="Ваш логин" autofocus autocomplete="username"
+               value="{{ form.username.value|default:'' }}">
+      </div>
+
+      <div class="field">
+        <label class="field__label">Пароль</label>
+        <input type="password" name="password" class="field__input"
+               placeholder="••••••••" autocomplete="current-password">
+      </div>
+
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:1rem">Войти</button>
+    </form>
+
+    <div class="auth-footer" style="margin-top:1.5rem">
+      Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Помощь — LuxStay{% endblock %}
+
+{% block content %}
+
+<section class="section">
+  <div class="container" style="max-width:800px;">
+
+    <h1 style="font-size:2.5rem;margin-bottom:2rem;">F.A.Q</h1>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        Как забронировать отель?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        Выберите отель, нажмите "Подробнее" и оформите бронирование.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        Можно ли отменить бронь?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        Да, если у отеля есть бесплатная отмена.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        Как оплатить?
+        <span>+</span>
+      </div>
+      <div class="faq-answer">
+        Оплата возможна картой или при заселении.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.faq-item {
+  border-bottom: 1px solid rgba(200,169,110,.2);
+  padding: 1rem 0;
+}
+.faq-question {
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+  color:#f2ede4;
+  font-size:1rem;
+}
+.faq-answer {
+  display:none;
+  color:rgba(242,237,228,.6);
+  margin-top:.5rem;
+}
+</style>
+
+<script>
+function toggleFAQ(el) {
+  const answer = el.nextElementSibling;
+  answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+
+{% endblock %}
